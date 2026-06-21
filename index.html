@@ -365,6 +365,98 @@
     }
     .wish-author { font-size: 13px; color: #c9547a; margin-top: 8px; font-style: normal; font-weight: 500; }
 
+    /* Wishes */
+    .wish-input-wrap { max-width: 500px; margin: 32px auto 0; }
+    .wish-input-wrap input,
+    .wish-input-wrap textarea {
+      width: 100%;
+      border: 1px solid rgba(201,84,122,0.3);
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      color: #5a1a35;
+      background: rgba(255,255,255,0.7);
+      margin-bottom: 12px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .wish-input-wrap textarea { height: 100px; resize: none; }
+    .btn-send {
+      padding: 12px 44px;
+      border: none;
+      border-radius: 40px;
+      background: linear-gradient(135deg, #c9547a, #e8a0bc);
+      color: #fff;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-send:hover { opacity: 0.85; }
+    .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+    .wishes-list { max-width: 500px; margin: 28px auto 0; }
+    .wish-item {
+      background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(201,84,122,0.15);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      font-style: italic;
+      color: #6b2040;
+      animation: fadeIn 0.4s ease;
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+    .wish-author { font-size: 13px; color: #c9547a; margin-top: 8px; font-style: normal; font-weight: 500; }
+    .wish-time { font-size: 11px; color: #e8a0bc; margin-top: 4px; font-style: normal; }
+    .wishes-empty { font-family:'Cormorant Garamond',serif; font-style:italic; color:#e8a0bc; font-size:15px; margin-top:20px; }
+    .wishes-loading { font-family:'Cormorant Garamond',serif; font-style:italic; color:#c9547a; font-size:15px; margin-top:20px; }
+
+    /* RSVP */
+    .rsvp-wrap { max-width: 500px; margin: 32px auto 0; }
+    .rsvp-wrap input, .rsvp-wrap select {
+      width: 100%; box-sizing: border-box;
+      border: 1px solid rgba(201,84,122,0.3); border-radius: 10px;
+      padding: 12px 16px; font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; color: #5a1a35; background: rgba(255,255,255,0.7);
+      margin-bottom: 12px; outline: none;
+    }
+    .rsvp-choices { display: flex; gap: 12px; margin-bottom: 12px; }
+    .rsvp-choice {
+      flex: 1; padding: 14px; border: 1.5px solid rgba(201,84,122,0.25);
+      border-radius: 12px; cursor: pointer; text-align: center;
+      font-family: 'Cormorant Garamond', serif; font-size: 16px;
+      color: #8b2252; background: rgba(255,255,255,0.6); transition: all 0.2s;
+    }
+    .rsvp-choice:hover { border-color: #c9547a; background: rgba(201,84,122,0.08); }
+    .rsvp-choice.selected-yes { border-color: #c9547a; background: rgba(201,84,122,0.12); font-weight: 600; }
+    .rsvp-choice.selected-no  { border-color: #aaa; background: rgba(0,0,0,0.04); color: #888; }
+    .rsvp-choice .choice-icon { font-size: 26px; display: block; margin-bottom: 4px; }
+    .rsvp-success { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:18px; color:#8b2252; padding:24px; background:rgba(201,84,122,0.08); border-radius:14px; margin-top:12px; }
+
+    /* Admin panel */
+    #admin-panel { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:999; overflow-y:auto; }
+    .admin-inner { background:#fff; max-width:860px; margin:40px auto; border-radius:16px; overflow:hidden; }
+    .admin-header { background:#8b2252; padding:20px 28px; display:flex; align-items:center; justify-content:space-between; }
+    .admin-header h2 { color:#fff; font-family:'Playfair Display',serif; font-size:22px; margin:0; }
+    .admin-close { color:#fff; font-size:24px; cursor:pointer; background:none; border:none; line-height:1; }
+    .admin-stats { display:flex; gap:16px; padding:20px 28px; background:#fdf0f5; border-bottom:1px solid rgba(201,84,122,0.15); flex-wrap:wrap; }
+    .admin-stat { text-align:center; background:#fff; border:1px solid rgba(201,84,122,0.2); border-radius:10px; padding:12px 20px; }
+    .admin-stat-num { font-family:'Playfair Display',serif; font-size:28px; color:#8b2252; display:block; }
+    .admin-stat-label { font-size:12px; color:#c9547a; }
+    .admin-body { padding:20px 28px; }
+    .admin-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .admin-table th { background:#fdf0f5; color:#8b2252; padding:10px 12px; text-align:left; border-bottom:2px solid rgba(201,84,122,0.2); font-family:'Playfair Display',serif; }
+    .admin-table td { padding:10px 12px; border-bottom:1px solid rgba(201,84,122,0.08); color:#5a1a35; vertical-align:top; }
+    .admin-table tr:hover td { background:rgba(201,84,122,0.04); }
+    .badge-yes { display:inline-block; padding:2px 10px; background:#d4edda; color:#155724; border-radius:20px; font-size:11px; }
+    .badge-no  { display:inline-block; padding:2px 10px; background:#f0f0f0; color:#666; border-radius:20px; font-size:11px; }
+    .btn-export { padding:10px 24px; background:#217346; color:#fff; border:none; border-radius:8px; font-size:14px; cursor:pointer; display:flex; align-items:center; gap:8px; }
+    .btn-export:hover { opacity:0.85; }
+
     /* Album */
     .album-grid {
       display: grid;
@@ -547,6 +639,93 @@
   </div>
 </section>
 
+<!-- RSVP -->
+<section id="rsvp" style="text-align:center;">
+  <span class="section-sub">Xác nhận tham dự</span>
+  <h2 class="section-title">Bạn có tham dự không?</h2>
+  <div class="rose-divider">✿ ✿ ✿</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:#a0455e;max-width:480px;margin:0 auto;">
+    Hãy cho chúng mình biết để chuẩn bị đón tiếp bạn thật chu đáo nhé!
+  </p>
+  <div class="rsvp-wrap">
+    <input type="text" id="rsvp-name" placeholder="Họ tên của bạn..." maxlength="60" />
+    <div class="rsvp-choices">
+      <div class="rsvp-choice" id="choice-yes" onclick="selectRsvp('yes')">
+        <span class="choice-icon">🥂</span>
+        Có, tôi sẽ tham dự!
+      </div>
+      <div class="rsvp-choice" id="choice-no" onclick="selectRsvp('no')">
+        <span class="choice-icon">😔</span>
+        Rất tiếc, tôi không đến được
+      </div>
+    </div>
+    <div id="rsvp-guests-wrap" style="display:none;">
+      <select id="rsvp-guests">
+        <option value="1">Chỉ mình tôi (1 người)</option>
+        <option value="2">Tôi + 1 người (2 người)</option>
+        <option value="3">Tôi + 2 người (3 người)</option>
+        <option value="4">Tôi + 3 người (4 người)</option>
+        <option value="5">Tôi + 4 người (5 người)</option>
+      </select>
+    </div>
+    <div id="rsvp-result"></div>
+    <button class="btn-send" id="btn-rsvp" onclick="submitRsvp()" style="display:none;">Xác nhận</button>
+  </div>
+</section>
+
+<!-- Admin panel (ẩn, chỉ hiện khi ?admin=1) -->
+<div id="admin-panel">
+  <div class="admin-inner">
+    <div class="admin-header">
+      <h2>Danh sách RSVP — Sơn &amp; Tâm</h2>
+      <button class="admin-close" onclick="document.getElementById('admin-panel').style.display='none'">✕</button>
+    </div>
+    <div class="admin-stats">
+      <div class="admin-stat"><span class="admin-stat-num" id="stat-total">0</span><span class="admin-stat-label">Tổng phản hồi</span></div>
+      <div class="admin-stat"><span class="admin-stat-num" id="stat-yes">0</span><span class="admin-stat-label">Có tham dự</span></div>
+      <div class="admin-stat"><span class="admin-stat-num" id="stat-guests">0</span><span class="admin-stat-label">Tổng số người đến</span></div>
+      <div class="admin-stat"><span class="admin-stat-num" id="stat-no">0</span><span class="admin-stat-label">Không tham dự</span></div>
+    </div>
+    <div class="admin-body">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+        <button class="btn-export" onclick="exportExcel()">
+          <i class="ti ti-file-spreadsheet"></i> Xuất Excel
+        </button>
+      </div>
+      <table class="admin-table" id="rsvp-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Họ tên</th>
+            <th>Tham dự</th>
+            <th>Số người</th>
+            <th>Thời gian</th>
+          </tr>
+        </thead>
+        <tbody id="rsvp-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- WISHES -->
+<section id="wishes" style="text-align:center;">
+  <span class="section-sub">Sổ lưu bút</span>
+  <h2 class="section-title">Gửi lời chúc</h2>
+  <div class="rose-divider">✦ ✦ ✦</div>
+  <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:#a0455e;max-width:480px;margin:0 auto;">
+    Hãy để lại lời chúc cho Sơn &amp; Tâm nhé — chúng mình sẽ trân trọng từng lời!
+  </p>
+  <div class="wish-input-wrap">
+    <input type="text" id="wish-name" placeholder="Tên của bạn..." maxlength="50" />
+    <textarea id="wish-text" placeholder="Lời chúc của bạn dành cho Sơn &amp; Tâm..."></textarea>
+    <button class="btn-send" id="btn-send" onclick="sendWish()">Gửi lời chúc 💌</button>
+  </div>
+  <div class="wishes-list" id="wishes-list">
+    <div class="wishes-loading">Đang tải lời chúc...</div>
+  </div>
+</section>
+
 <!-- DONATE / QR -->
 <section id="donate" class="section-alt" style="text-align:center;">
   <span class="section-sub">Hộp mừng cưới</span>
@@ -593,40 +772,175 @@
   </p>
 </footer>
 
-<script>
-  // Falling petals
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA29oG62ZPBavH_ZJematr_pIfdudYZnfU",
+    authDomain: "thiepcuoisontam-b273a.firebaseapp.com",
+    projectId: "thiepcuoisontam-b273a",
+    storageBucket: "thiepcuoisontam-b273a.firebasestorage.app",
+    messagingSenderId: "246502440468",
+    appId: "1:246502440468:web:99a99c4065937b0bf67101",
+    measurementId: "G-7KQQ6NCC7J"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  // ── RSVP ────────────────────────────────────────────
+  let rsvpChoice = null;
+  let allRsvps = [];
+
+  window.selectRsvp = function(val) {
+    rsvpChoice = val;
+    document.getElementById('choice-yes').className = 'rsvp-choice' + (val==='yes' ? ' selected-yes' : '');
+    document.getElementById('choice-no').className  = 'rsvp-choice' + (val==='no'  ? ' selected-no'  : '');
+    document.getElementById('rsvp-guests-wrap').style.display = val === 'yes' ? 'block' : 'none';
+    document.getElementById('btn-rsvp').style.display = 'inline-block';
+  };
+
+  window.submitRsvp = async function() {
+    const name   = document.getElementById('rsvp-name').value.trim();
+    const btn    = document.getElementById('btn-rsvp');
+    const guests = rsvpChoice === 'yes' ? parseInt(document.getElementById('rsvp-guests').value) : 0;
+    if (!name)       { alert('Vui lòng nhập họ tên!'); return; }
+    if (!rsvpChoice) { alert('Vui lòng chọn tham dự hay không!'); return; }
+    btn.disabled = true; btn.textContent = 'Đang gửi...';
+    try {
+      await addDoc(collection(db, 'rsvp'), { name, attending: rsvpChoice === 'yes', guests, createdAt: serverTimestamp() });
+      document.getElementById('rsvp-result').innerHTML =
+        rsvpChoice === 'yes'
+          ? `<div class="rsvp-success">🥂 Cảm ơn <strong>${name}</strong>! Chúng mình rất vui khi được đón bạn. Hẹn gặp ngày 02/08/2026!</div>`
+          : `<div class="rsvp-success">💌 Cảm ơn <strong>${name}</strong> đã phản hồi. Rất tiếc khi không được gặp bạn, chúng mình vẫn trân trọng tình cảm của bạn!</div>`;
+      document.getElementById('rsvp-name').value = '';
+      document.getElementById('choice-yes').className = 'rsvp-choice';
+      document.getElementById('choice-no').className  = 'rsvp-choice';
+      document.getElementById('rsvp-guests-wrap').style.display = 'none';
+      btn.style.display = 'none';
+      rsvpChoice = null;
+    } catch(e) {
+      alert('Gửi thất bại, vui lòng thử lại!');
+      btn.disabled = false; btn.textContent = 'Xác nhận';
+    }
+  };
+
+  // ── WISHES ──────────────────────────────────────────
+  const wq = query(collection(db, 'wishes'), orderBy('createdAt', 'desc'));
+  onSnapshot(wq, (snapshot) => {
+    const list = document.getElementById('wishes-list');
+    if (snapshot.empty) {
+      list.innerHTML = '<div class="wishes-empty">Chưa có lời chúc nào — hãy là người đầu tiên! 🌸</div>';
+      return;
+    }
+    list.innerHTML = snapshot.docs.map(doc => {
+      const d    = doc.data();
+      const date = d.createdAt ? new Date(d.createdAt.seconds * 1000).toLocaleDateString('vi-VN') : '';
+      return `<div class="wish-item">
+        <div>${d.text}</div>
+        <div class="wish-author">— ${d.name}</div>
+        ${date ? `<div class="wish-time">${date}</div>` : ''}
+      </div>`;
+    }).join('');
+  });
+
+  window.sendWish = async function() {
+    const name = document.getElementById('wish-name').value.trim();
+    const text = document.getElementById('wish-text').value.trim();
+    const btn  = document.getElementById('btn-send');
+    if (!name || !text) { alert('Vui lòng nhập tên và lời chúc!'); return; }
+    btn.disabled = true; btn.textContent = 'Đang gửi...';
+    try {
+      await addDoc(collection(db, 'wishes'), { name, text, createdAt: serverTimestamp() });
+      document.getElementById('wish-name').value = '';
+      document.getElementById('wish-text').value = '';
+      btn.textContent = 'Đã gửi 💌';
+      setTimeout(() => { btn.textContent = 'Gửi lời chúc 💌'; btn.disabled = false; }, 2000);
+    } catch(e) {
+      alert('Gửi thất bại, vui lòng thử lại!');
+      btn.textContent = 'Gửi lời chúc 💌'; btn.disabled = false;
+    }
+  };
+
+  // ── ADMIN ────────────────────────────────────────────
+  const isAdmin = new URLSearchParams(window.location.search).get('admin') === '1';
+  if (isAdmin) {
+    document.getElementById('admin-panel').style.display = 'block';
+    const rq = query(collection(db, 'rsvp'), orderBy('createdAt', 'asc'));
+    onSnapshot(rq, (snapshot) => {
+      allRsvps = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const yes    = allRsvps.filter(r => r.attending);
+      const no     = allRsvps.filter(r => !r.attending);
+      const guests = yes.reduce((s, r) => s + (r.guests || 1), 0);
+      document.getElementById('stat-total').textContent  = allRsvps.length;
+      document.getElementById('stat-yes').textContent    = yes.length;
+      document.getElementById('stat-guests').textContent = guests;
+      document.getElementById('stat-no').textContent     = no.length;
+      document.getElementById('rsvp-tbody').innerHTML = allRsvps.map((r, i) => {
+        const date = r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleString('vi-VN') : '—';
+        return `<tr>
+          <td>${i + 1}</td>
+          <td><strong>${r.name}</strong></td>
+          <td>${r.attending ? '<span class="badge-yes">✓ Có</span>' : '<span class="badge-no">✗ Không</span>'}</td>
+          <td>${r.attending ? (r.guests || 1) + ' người' : '—'}</td>
+          <td style="font-size:12px;color:#999;">${date}</td>
+        </tr>`;
+      }).join('');
+    });
+  }
+
+  // ── EXPORT EXCEL (CSV) ───────────────────────────────
+  window.exportExcel = function() {
+    if (!allRsvps.length) { alert('Chưa có dữ liệu!'); return; }
+    const header = ['STT', 'Họ tên', 'Tham dự', 'Số người', 'Thời gian'];
+    const rows = allRsvps.map((r, i) => [
+      i + 1,
+      r.name,
+      r.attending ? 'Có' : 'Không',
+      r.attending ? (r.guests || 1) : 0,
+      r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleString('vi-VN') : ''
+    ]);
+    const csv = [header, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+    const bom  = '\uFEFF';
+    const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'rsvp-son-tam.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // ── PETALS ───────────────────────────────────────────
   (function() {
-    var container = document.getElementById('petals-container');
+    var c = document.getElementById('petals-container');
     for (var i = 0; i < 20; i++) {
       var p = document.createElement('div');
       p.className = 'petal';
       p.style.left = Math.random() * 100 + 'vw';
       p.style.animationDuration = (6 + Math.random() * 8) + 's';
-      p.style.animationDelay = (Math.random() * 12) + 's';
+      p.style.animationDelay    = (Math.random() * 12) + 's';
       p.style.opacity = 0.3 + Math.random() * 0.5;
-      p.style.width = (8 + Math.random() * 8) + 'px';
-      p.style.height = (10 + Math.random() * 10) + 'px';
-      container.appendChild(p);
+      p.style.width   = (8  + Math.random() * 8)  + 'px';
+      p.style.height  = (10 + Math.random() * 10) + 'px';
+      c.appendChild(p);
     }
   })();
 
-  // Countdown
+  // ── COUNTDOWN ────────────────────────────────────────
   function updateCountdown() {
     var target = new Date('2026-08-02T10:00:00');
-    var now = new Date();
-    var diff = target - now;
+    var diff   = target - new Date();
     if (diff <= 0) {
-      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(function(id){ document.getElementById(id).textContent = '0'; });
+      ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(id => document.getElementById(id).textContent = '0');
       return;
     }
     document.getElementById('cd-days').textContent  = Math.floor(diff / 86400000);
     document.getElementById('cd-hours').textContent = Math.floor((diff % 86400000) / 3600000);
-    document.getElementById('cd-mins').textContent  = Math.floor((diff % 3600000) / 60000);
-    document.getElementById('cd-secs').textContent  = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-mins').textContent  = Math.floor((diff % 3600000)  / 60000);
+    document.getElementById('cd-secs').textContent  = Math.floor((diff % 60000)    / 1000);
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
-
 </script>
 </body>
 </html>
