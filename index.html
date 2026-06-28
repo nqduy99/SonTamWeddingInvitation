@@ -3034,20 +3034,23 @@
 
       // ── MUSIC ────────────────────────────────────────────
       let musicPlaying = false;
+      let fadingTimer = null;
       const bgMusic = document.getElementById('bg-music');
 
-      // Fade volume in/out smoothly
+      // Fade volume in/out — hủy fade cũ trước khi bắt đầu fade mới
       function fadeVolume(targetVol, duration, callback) {
+        if (fadingTimer) { clearInterval(fadingTimer); fadingTimer = null; }
         const steps = 20;
         const interval = duration / steps;
         const startVol = bgMusic.volume;
         const diff = (targetVol - startVol) / steps;
         let step = 0;
-        const timer = setInterval(function () {
+        fadingTimer = setInterval(function () {
           step++;
           bgMusic.volume = Math.min(1, Math.max(0, startVol + diff * step));
           if (step >= steps) {
-            clearInterval(timer);
+            clearInterval(fadingTimer);
+            fadingTimer = null;
             bgMusic.volume = targetVol;
             if (callback) callback();
           }
@@ -3057,26 +3060,28 @@
       window.toggleMusic = function () {
         const btn = document.getElementById('music-btn');
         if (!musicPlaying) {
+          // Dừng fade-out nếu đang chạy, bắt đầu phát lại
+          if (fadingTimer) { clearInterval(fadingTimer); fadingTimer = null; }
           bgMusic.volume = 0;
-          bgMusic.play().then(function () {
-            fadeVolume(1, 1200);
-            btn.textContent = '🎶';
-            btn.classList.add('playing');
-            musicPlaying = true;
-          }).catch(function () {
-            // Autoplay blocked — vẫn đánh dấu để thử lại khi có gesture
-            btn.textContent = '🎶';
-            btn.classList.add('playing');
-            musicPlaying = true;
-          });
+          var playPromise = bgMusic.play();
+          if (playPromise !== undefined) {
+            playPromise.then(function () {
+              fadeVolume(1, 1200);
+            }).catch(function () {
+              // Mobile blocked — vẫn cập nhật UI, user thử lại được
+            });
+          }
+          btn.textContent = '🎶';
+          btn.classList.add('playing');
+          musicPlaying = true;
         } else {
-          fadeVolume(0, 800, function () {
-            bgMusic.pause();
-            bgMusic.currentTime = 0;
-          });
+          // Fade out rồi pause — KHÔNG reset currentTime để tiếp tục được từ chỗ dừng
+          musicPlaying = false;
           btn.textContent = '🎵';
           btn.classList.remove('playing');
-          musicPlaying = false;
+          fadeVolume(0, 600, function () {
+            bgMusic.pause();
+          });
         }
       };
 
