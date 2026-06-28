@@ -66,8 +66,10 @@
       z-index: 9999;
       background: linear-gradient(160deg, #3d1a28 0%, #5a2238 40%, #2d1020 100%);
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
+      overflow-y: auto;
+      overflow-x: hidden;
       transition: opacity 0.8s ease, visibility 0.8s ease;
     }
 
@@ -1353,9 +1355,12 @@
       inset: 0;
       z-index: 8000;
       background: rgba(0, 0, 0, 0.55);
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      padding: 20px;
+      padding: 60px 16px 40px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-sizing: border-box;
     }
 
     #env-popup.show {
@@ -1370,6 +1375,8 @@
       max-width: 520px;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
       animation: popupIn 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+      margin: auto;
+      flex-shrink: 0;
     }
 
     @keyframes popupIn {
@@ -1821,9 +1828,11 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      padding: 20px;
+      padding: 80px 20px 60px;
       width: 100%;
       max-width: 860px;
+      min-height: 100%;
+      box-sizing: border-box;
     }
 
     .cover-card {
@@ -3030,11 +3039,16 @@
         const iframe = document.getElementById('yt-iframe');
         const btn = document.getElementById('music-btn');
         if (!musicPlaying) {
-          // Gán src với autoplay=1 (chỉ hoạt động sau user interaction)
-          iframe.src = 'https://www.youtube.com/embed/jPjQJYKhhk4?autoplay=1&loop=1&playlist=jPjQJYKhhk4&controls=0&mute=0';
+          // Load muted first (passes mobile autoplay policy), then unmute
+          iframe.src = 'https://www.youtube.com/embed/jPjQJYKhhk4?autoplay=1&loop=1&playlist=jPjQJYKhhk4&controls=0&mute=1';
           btn.textContent = '🎶';
           btn.classList.add('playing');
           musicPlaying = true;
+          iframe.addEventListener('load', function () {
+            try {
+              iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+            } catch (e) {}
+          }, { once: true });
         } else {
           iframe.src = '';
           btn.textContent = '🎵';
@@ -3280,10 +3294,18 @@
         window.scrollTo({ top: 0, behavior: 'instant' });
         setTimeout(function () {
           const iframe = document.getElementById('yt-iframe');
-          iframe.src = 'https://www.youtube.com/embed/jPjQJYKhhk4?autoplay=1&loop=1&playlist=jPjQJYKhhk4&controls=0';
+          // Mobile browsers require user gesture + muted to autoplay
+          // Load muted first, then try unmuted
+          iframe.src = 'https://www.youtube.com/embed/jPjQJYKhhk4?autoplay=1&loop=1&playlist=jPjQJYKhhk4&controls=0&mute=1';
           document.getElementById('music-btn').textContent = '🎶';
           document.getElementById('music-btn').classList.add('playing');
           musicPlaying = true;
+          // After iframe loads, attempt unmute via postMessage
+          iframe.addEventListener('load', function () {
+            try {
+              iframe.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*');
+            } catch (e) {}
+          }, { once: true });
         }, 800);
       };
 
