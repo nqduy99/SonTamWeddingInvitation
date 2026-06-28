@@ -2440,6 +2440,21 @@
       min-width: 130px;
     }
 
+    /* Venue choices: 2 nút đầu 1 hàng, nút "Cả hai nhà" xuống dòng căn giữa */
+    .rsvp-venue-choices {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .rsvp-venue-choices .rsvp-venue-btn {
+      flex: 1 1 120px;
+      max-width: calc(50% - 6px);
+    }
+    .rsvp-venue-both {
+      flex: 0 1 auto !important;
+      min-width: 160px;
+      max-width: 220px !important;
+    }
+
     .rsvp-venue-btn.selected-venue {
       border-color: var(--c-accent);
       background: rgba(201,84,122,0.12);
@@ -2747,6 +2762,10 @@
           <div class="alb-placeholder"><i class="ti ti-photo"></i><span>Ảnh 4</span></div>
           <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
         </div>
+        <div class="alb" data-idx="4">
+          <div class="alb-placeholder"><i class="ti ti-photo"></i><span>Ảnh 5</span></div>
+          <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
+        </div>
       </div>
     </section>
 
@@ -2834,7 +2853,7 @@
           <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--c-mid);margin-bottom:12px;">
             Bạn sẽ tham dự tiệc ở:
           </p>
-          <div class="rsvp-choices">
+          <div class="rsvp-choices rsvp-venue-choices">
             <div class="rsvp-choice rsvp-venue-btn" id="venue-gai" onclick="selectVenue('gai')">
               <span class="choice-icon">🌸</span>
               Nhà Gái
@@ -2843,7 +2862,7 @@
               <span class="choice-icon">🥂</span>
               Nhà Trai
             </div>
-            <div class="rsvp-choice rsvp-venue-btn" id="venue-both" onclick="selectVenue('both')">
+            <div class="rsvp-choice rsvp-venue-btn rsvp-venue-both" id="venue-both" onclick="selectVenue('both')">
               <span class="choice-icon">💕</span>
               Cả hai nhà
             </div>
@@ -3772,8 +3791,8 @@
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5011.JPG',
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5093.JPG',
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5203.JPG',
-          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7130.JPG',
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7145.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7130.JPG',
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7220.JPG',
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7292.JPG',
           'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5242.JPG',
@@ -3815,7 +3834,7 @@
 
       // Render 4 ô album với ảnh của thiệp hiện tại
       function renderAlbum(type) {
-        var srcs = ALBUM_SRCS[type] || ['', '', '', ''];
+        var srcs = ALBUM_SRCS[type] || ['', '', '', '', ''];
         lbSrcs = srcs.slice(); // copy để lightbox dùng
         lbIdx  = 0;
 
@@ -3868,12 +3887,12 @@
 
             cell.appendChild(img);
 
-            // Badge "+N" ở ô cuối nếu có nhiều ảnh hơn 4
+            // Badge "+N" ở ô cuối nếu có nhiều ảnh hơn 5
             var total = srcs.filter(function(s){ return s; }).length;
-            if (i === 3 && total > 4) {
+            if (i === 4 && total > 5) {
               var badge = document.createElement('div');
               badge.className = 'alb-more-badge';
-              badge.textContent = '+' + (total - 4);
+              badge.textContent = '+' + (total - 5);
               cell.appendChild(badge);
             }
           } else {
