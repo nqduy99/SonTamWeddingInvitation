@@ -1765,7 +1765,7 @@
       width: auto; height: auto;
       border-radius: 10px; object-fit: contain;
       box-shadow: 0 16px 60px rgba(0,0,0,0.8);
-      transition: opacity 0.18s ease;
+      transition: opacity 0.08s ease;
       display: block;
     }
     #lb-img.fading { opacity: 0; }
@@ -3087,7 +3087,7 @@
     </footer>
 
     <!-- MUSIC PLAYER (ẩn) -->
-    <div id="yt-player-wrap" style="position:fixed;bottom:24px;right:24px;z-index:500;">
+    <div id="yt-player-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9000;">
       <button id="music-btn" onclick="toggleMusic()" title="Bật/tắt nhạc" style="width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
            background:linear-gradient(135deg,#c9547a,#e8a0bc);
            color:white;font-size:22px;box-shadow:0 4px 16px rgba(201,84,122,0.4);
@@ -3881,6 +3881,9 @@
         });
       }
 
+      // Cache preload — giữ reference để browser không GC
+      var lbPreloadCache = [];
+
       function lbShow(src, idx) {
         var lb  = document.getElementById('lightbox');
         var img = document.getElementById('lb-img');
@@ -3893,6 +3896,15 @@
         document.body.style.overflow = 'hidden';
         lbBuildStrip();
         lbUpdateStrip();
+
+        // Preload toàn bộ ảnh vào browser cache ngay khi mở lightbox
+        lbPreloadCache = [];
+        lbSrcs.forEach(function(s, i) {
+          if (!s || i === idx) return; // ảnh hiện tại đã load rồi
+          var pre = new Image();
+          pre.src = s;
+          lbPreloadCache.push(pre); // giữ reference để không bị GC
+        });
       }
 
       // Build thumbnail strip — dùng lazy loading để không tải hết 1 lần
@@ -3951,20 +3963,21 @@
       function lbGoTo(idx) {
         if (!lbSrcs[idx]) return;
         var img = document.getElementById('lb-img');
+        var nextSrc = lbSrcs[idx];
+
+        // Kiểm tra ảnh đã có trong cache chưa (complete = đã load)
+        var cached = lbPreloadCache.find(function(p) { return p.src === nextSrc && p.complete; });
+        var delay = cached ? 60 : 80; // ảnh đã cache thì chuyển nhanh hơn
+
         img.classList.add('fading');
         setTimeout(function() {
           lbIdx = idx;
-          img.src = lbSrcs[lbIdx];
+          img.src = nextSrc;
           img.classList.remove('fading');
           var total = lbSrcs.filter(function(s){ return s; }).length;
           document.getElementById('lb-counter').textContent = total > 1 ? (lbIdx + 1) + ' / ' + total : '';
           lbUpdateStrip();
-          // Prefetch ảnh kế tiếp và trước để chuyển nhanh hơn
-          [1, -1].forEach(function(d) {
-            var ni = (lbIdx + d + lbSrcs.length) % lbSrcs.length;
-            if (lbSrcs[ni]) { var pre = new Image(); pre.src = lbSrcs[ni]; }
-          });
-        }, 160);
+        }, delay);
       }
 
       window.lbClose = function() {
