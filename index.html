@@ -1553,10 +1553,19 @@
     .alb {
       overflow: hidden;
       border-radius: 14px;
-      background: rgba(201, 84, 122, 0.08);
+      background: rgba(20, 8, 16, 0.06);
       cursor: pointer;
       position: relative;
-      aspect-ratio: 3 / 4;
+      /* Không cố định aspect-ratio — để ảnh tự quyết định chiều cao */
+      min-height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ảnh ngang chiếm cả 2 cột */
+    .alb.landscape {
+      grid-column: span 2;
     }
 
     .alb img {
@@ -1566,6 +1575,18 @@
       display: block;
       transition: transform 0.4s ease;
       filter: brightness(0.97);
+      /* Giữ tỉ lệ thực của ảnh */
+      aspect-ratio: attr(width) / attr(height);
+    }
+
+    /* Ảnh dọc: giữ tỉ lệ 3/4 */
+    .alb:not(.landscape) {
+      aspect-ratio: 3 / 4;
+    }
+
+    /* Ảnh ngang: giữ tỉ lệ 4/3 */
+    .alb.landscape {
+      aspect-ratio: 4 / 3;
     }
 
     .alb:hover img {
@@ -1735,12 +1756,13 @@
       display: flex; align-items: center; justify-content: center;
       width: 100%; flex: 1;
       min-height: 0;
-      padding: 52px 70px 16px;
+      padding: 52px 60px 16px;
       box-sizing: border-box;
     }
 
     #lb-img {
       max-width: 100%; max-height: 100%;
+      width: auto; height: auto;
       border-radius: 10px; object-fit: contain;
       box-shadow: 0 16px 60px rgba(0,0,0,0.8);
       transition: opacity 0.18s ease;
@@ -3795,10 +3817,16 @@
             img.alt = 'Ảnh cưới ' + (i + 1);
             img.loading = 'lazy'; // browser native lazy load
 
-            // Khi ảnh load xong: ẩn skeleton, fade in ảnh
+            // Khi ảnh load xong: detect ngang/dọc, ẩn skeleton, fade in ảnh
             img.onload = function() {
               img.classList.add('loaded');
               if (skeleton.parentNode) skeleton.parentNode.removeChild(skeleton);
+              // Nếu ảnh nằm ngang thì thêm class landscape vào cell
+              if (img.naturalWidth > img.naturalHeight) {
+                cell.classList.add('landscape');
+              } else {
+                cell.classList.remove('landscape');
+              }
             };
             img.onerror = function() {
               if (skeleton.parentNode) skeleton.parentNode.removeChild(skeleton);
