@@ -1544,25 +1544,19 @@
     /* Album */
     .album-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: auto;
+      grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-      max-width: 860px;
+      max-width: 720px;
       margin: 32px auto 0;
     }
 
     .alb {
       overflow: hidden;
-      border-radius: 12px;
+      border-radius: 14px;
       background: rgba(201, 84, 122, 0.08);
-    }
-
-    .alb-wide {
-      grid-column: span 2;
-    }
-
-    .alb-tall {
-      grid-row: span 2;
+      cursor: pointer;
+      position: relative;
+      aspect-ratio: 3 / 4;
     }
 
     .alb img {
@@ -1570,19 +1564,17 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      min-height: 160px;
       transition: transform 0.4s ease;
       filter: brightness(0.97);
     }
 
     .alb:hover img {
       transform: scale(1.04);
-      filter: brightness(1);
+      filter: brightness(1.03);
     }
 
     .alb-placeholder {
       width: 100%;
-      min-height: 160px;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -1595,25 +1587,44 @@
       gap: 8px;
     }
 
-    .alb-placeholder i {
-      font-size: 28px;
+    .alb-placeholder i { font-size: 28px; }
+
+    .alb-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(139,34,82,0.52) 0%, transparent 55%);
+      opacity: 0; transition: opacity 0.3s ease;
+      border-radius: 14px;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding-bottom: 12px;
+    }
+    .alb:hover .alb-overlay { opacity: 1; }
+    .alb-zoom-icon { color: #fff; font-size: 22px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+
+    /* +N badge cho ô cuối */
+    .alb-more-badge {
+      position: absolute; inset: 0;
+      background: rgba(20,8,16,0.52);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 28px; font-weight: 700;
+      color: #fff; border-radius: 14px;
+      letter-spacing: 1px;
     }
 
-    @media (max-width: 600px) {
-      .album-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .alb-wide {
-        grid-column: span 2;
-      }
-
-      .alb-tall {
-        grid-row: span 1;
-      }
+    /* Album skeleton loading */
+    .alb-skeleton {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, rgba(201,84,122,0.07) 25%, rgba(201,84,122,0.13) 50%, rgba(201,84,122,0.07) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 14px;
     }
-
-    footer {
+    @keyframes shimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    .alb img { opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; }
+    .alb img.loaded { opacity: 1; }
       text-align: center;
       padding: 60px 20px 100px;
       border-top: 1px solid rgba(201, 84, 122, 0.15);
@@ -1705,51 +1716,113 @@
 
     /* ── LIGHTBOX ──────────────────────────────── */
     #lightbox {
-      display:none; position:fixed; inset:0; z-index:9500;
-      background:rgba(8,4,12,0.93); backdrop-filter:blur(5px);
-      align-items:center; justify-content:center;
+      display: none; position: fixed; inset: 0; z-index: 9500;
+      background: rgba(6, 3, 10, 0.96);
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0;
     }
-    #lightbox.show { display:flex; }
+    #lightbox.show { display: flex; }
+
+    /* Vùng ảnh chính */
+    #lb-main {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; flex: 1;
+      min-height: 0;
+      padding: 52px 70px 16px;
+      box-sizing: border-box;
+    }
 
     #lb-img {
-      max-width:88vw; max-height:85vh;
-      border-radius:12px; object-fit:contain;
-      box-shadow:0 24px 80px rgba(0,0,0,0.7);
-      animation: lbIn 0.28s ease;
+      max-width: 100%; max-height: 100%;
+      border-radius: 10px; object-fit: contain;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.8);
+      transition: opacity 0.18s ease;
+      display: block;
     }
-    @keyframes lbIn {
-      from { opacity:0; transform:scale(0.93); }
-      to   { opacity:1; transform:scale(1); }
+    #lb-img.fading { opacity: 0; }
+
+    /* Counter top-center */
+    #lb-counter {
+      position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 15px; color: rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.35); border-radius: 20px;
+      padding: 3px 14px; white-space: nowrap;
     }
 
+    /* Nút đóng */
     .lb-close {
-      position:fixed; top:18px; right:18px;
-      width:44px; height:44px; border-radius:50%;
-      border:1.5px solid rgba(255,255,255,0.18);
-      background:rgba(255,255,255,0.07);
-      color:#fff; font-size:18px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      transition:all 0.2s; backdrop-filter:blur(6px); z-index:9510;
+      position: absolute; top: 10px; right: 14px;
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.1);
+      color: #fff; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; z-index: 9520;
     }
-    .lb-close:hover { background:rgba(201,84,122,0.5); border-color:var(--c-accent); }
+    .lb-close:hover { background: rgba(201,84,122,0.7); border-color: #c9547a; }
 
+    /* Nút nav — highlight rõ */
     .lb-nav {
-      position:fixed; top:50%; transform:translateY(-50%);
-      width:50px; height:50px; border-radius:50%;
-      border:1.5px solid rgba(255,255,255,0.18);
-      background:rgba(255,255,255,0.07);
-      color:#fff; font-size:24px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      transition:all 0.2s; backdrop-filter:blur(6px); z-index:9510;
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.9);
+      background: linear-gradient(135deg, rgba(201,84,122,0.75), rgba(139,34,82,0.85));
+      color: #fff; font-size: 28px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.18s; z-index: 9520;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.55), 0 0 0 3px rgba(201,84,122,0.3);
     }
-    .lb-nav:hover { background:rgba(201,84,122,0.5); border-color:var(--c-accent); }
-    #lb-prev { left:14px; }
-    #lb-next { right:14px; }
+    .lb-nav:hover {
+      background: linear-gradient(135deg, #c9547a, #8b2252);
+      border-color: #fff;
+      transform: translateY(-50%) scale(1.12);
+      box-shadow: 0 6px 28px rgba(201,84,122,0.65), 0 0 0 4px rgba(201,84,122,0.4);
+    }
+    .lb-nav:active { transform: translateY(-50%) scale(0.97); }
+    #lb-prev { left: 12px; }
+    #lb-next { right: 12px; }
 
-    .lb-counter {
-      position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
-      font-family:'Cormorant Garamond',serif; font-style:italic;
-      font-size:15px; color:rgba(255,255,255,0.55); z-index:9510;
+    /* Thumbnail strip */
+    #lb-strip {
+      width: 100%;
+      padding: 10px 16px 14px;
+      box-sizing: border-box;
+      display: flex;
+      gap: 7px;
+      justify-content: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    #lb-strip::-webkit-scrollbar { display: none; }
+
+    .lb-thumb {
+      width: 60px; height: 60px;
+      border-radius: 7px;
+      object-fit: cover;
+      cursor: pointer;
+      opacity: 0.5;
+      border: 2px solid transparent;
+      transition: all 0.18s;
+      flex-shrink: 0;
+    }
+    .lb-thumb:hover { opacity: 0.85; }
+    .lb-thumb.active {
+      opacity: 1;
+      border-color: #c9547a;
+      box-shadow: 0 0 0 2px rgba(201,84,122,0.4);
+    }
+
+    @media (max-width: 600px) {
+      #lb-main { padding: 48px 54px 12px; }
+      .lb-nav { width: 44px; height: 44px; font-size: 22px; }
+      #lb-prev { left: 6px; }
+      #lb-next { right: 6px; }
+      .lb-thumb { width: 50px; height: 50px; }
     }
 
     /* ── MAP SECTION ───────────────────────────── */
@@ -2645,51 +2718,37 @@
         Những khoảnh khắc đẹp nhất trong hành trình của chúng mình ✨
       </p>
       <div class="album-grid" id="album-grid">
-        <div class="alb alb-wide" data-idx="0" data-src="">
-          <div class="alb-placeholder" style="min-height:220px;"><i class="ti ti-photo"></i><span>Ảnh đôi chính</span><span style="font-size:11px;opacity:0.55;">Thêm đường dẫn ảnh vào data-src</span></div>
+        <div class="alb" data-idx="0">
+          <div class="alb-placeholder"><i class="ti ti-photo"></i><span>Ảnh 1</span></div>
           <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
         </div>
-        <div class="alb alb-tall" data-idx="1" data-src="">
-          <div class="alb-placeholder" style="min-height:220px;"><i class="ti ti-photo"></i><span>Ảnh chân dung</span></div>
+        <div class="alb" data-idx="1">
+          <div class="alb-placeholder"><i class="ti ti-photo"></i><span>Ảnh 2</span></div>
           <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
         </div>
-        <div class="alb" data-idx="2" data-src="">
-          <div class="alb-placeholder" style="min-height:160px;"><i class="ti ti-photo"></i><span>Ảnh 3</span></div>
+        <div class="alb" data-idx="2">
+          <div class="alb-placeholder"><i class="ti ti-photo"></i><span>Ảnh 3</span></div>
           <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
         </div>
-        <div class="alb" data-idx="3" data-src="">
-          <div class="alb-placeholder" style="min-height:160px;"><i class="ti ti-photo"></i><span>Ảnh 4</span></div>
-          <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
-        </div>
-        <div class="alb" data-idx="4" data-src="">
-          <div class="alb-placeholder" style="min-height:160px;"><i class="ti ti-photo"></i><span>Ảnh 5</span></div>
-          <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
-        </div>
-        <div class="alb alb-wide" data-idx="5" data-src="">
-          <div class="alb-placeholder" style="min-height:160px;"><i class="ti ti-photo"></i><span>Ảnh ngoại cảnh</span></div>
-          <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
-        </div>
-        <div class="alb" data-idx="6" data-src="">
-          <div class="alb-placeholder" style="min-height:160px;"><i class="ti ti-photo"></i><span>Ảnh 7</span></div>
-          <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
-        </div>
-        <div class="alb" data-idx="7" data-src="">
-          <div class="alb-placeholder" style="min-height:160px;"><i class="ti ti-photo"></i><span>Ảnh 8</span></div>
+        <div class="alb" data-idx="3">
+          <div class="alb-placeholder"><i class="ti ti-photo"></i><span>Ảnh 4</span></div>
           <div class="alb-overlay"><span class="alb-zoom-icon">🔍</span></div>
         </div>
       </div>
-      <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:var(--c-light);margin-top:14px;">
-        💡 Để thêm ảnh: điền đường dẫn vào thuộc tính <code style="background:rgba(201,84,122,0.08);padding:1px 6px;border-radius:4px;">data-src=""</code> của từng ô
-      </p>
     </section>
 
     <!-- LIGHTBOX -->
     <div id="lightbox" onclick="lbClickOutside(event)">
-      <img id="lb-img" src="" alt="Ảnh cưới Thái Sơn &amp; Thanh Tâm" />
-      <button class="lb-close" onclick="lbClose()" title="Đóng">✕</button>
-      <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
-      <button class="lb-nav" id="lb-next" onclick="lbNav(1)">›</button>
-      <div class="lb-counter" id="lb-counter"></div>
+      <!-- Vùng ảnh chính -->
+      <div id="lb-main">
+        <img id="lb-img" src="" alt="Ảnh cưới Thái Sơn &amp; Thanh Tâm" />
+        <div id="lb-counter"></div>
+        <button class="lb-close" onclick="lbClose()" title="Đóng">✕</button>
+        <button class="lb-nav" id="lb-prev" onclick="lbNav(-1)">‹</button>
+        <button class="lb-nav" id="lb-next" onclick="lbNav(1)">›</button>
+      </div>
+      <!-- Thumbnail strip -->
+      <div id="lb-strip"></div>
     </div>
 
     <!-- EVENT INFO — layout tham khảo ảnh mẫu -->
@@ -3214,6 +3273,27 @@
         document.getElementById('profiles-sub').innerHTML =
           type === 'gai' ? 'Cô dâu &amp; Chú rể' : 'Chú rể &amp; Cô dâu';
 
+        // Album ảnh theo thiệp
+        renderAlbum(type);
+
+        // Ảnh đôi theo thiệp
+        const couplePhotoMap = {
+          gai:  'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/AnhDoiChinhNhaGai.JPG',
+          trai: 'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/AnhDoiChinhNhaNam.JPG'
+        };
+        const coupleImg = document.getElementById('couple-photo');
+        const couplePlaceholder = document.querySelector('.couple-photo-placeholder');
+        const photoSrc = couplePhotoMap[type];
+        if (photoSrc) {
+          coupleImg.src = photoSrc;
+          coupleImg.style.display = 'block';
+          if (couplePlaceholder) couplePlaceholder.style.display = 'none';
+        } else {
+          coupleImg.src = '';
+          coupleImg.style.display = 'none';
+          if (couplePlaceholder) couplePlaceholder.style.display = '';
+        }
+
         // Story sig & timeline date
         const sigName = type === 'gai' ? 'Thanh Tâm &amp; Thái Sơn' : 'Thái Sơn &amp; Thanh Tâm';
         document.getElementById('story-sig').innerHTML = sigName;
@@ -3597,31 +3677,261 @@
       setInterval(updateCountdown, 1000);
 
       // ── ALBUM + LIGHTBOX ──────────────────────────────────
-      var lbSrcs = [];
-      var lbIdx = 0;
+      // ── ALBUM & LIGHTBOX ─────────────────────────────────
+      // Mảng ảnh riêng cho từng thiệp
+      // 4 ảnh đầu = thumbnail lưới, tất cả = xem trong lightbox
+      var ALBUM_SRCS = {
+        gai: [
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7130.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7145.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7220.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7292.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5000.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5011.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5093.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5203.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5242.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5284.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5318.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5466.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5485.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5521.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5563.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5581.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5592.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5635.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5799.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5919.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5949.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5984.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A6070.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6138.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6148.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6173.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6240.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6298.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6557.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6577.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6601.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6671.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6752.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6816.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6859.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6964.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6996.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A7035.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A7075.JPG'
+        ],
+        trai: [
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5000.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5011.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5093.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5203.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7130.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7145.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7220.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album1/296A7292.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5242.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5284.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5318.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5466.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5485.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5521.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5563.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5581.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5592.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5635.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5799.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5919.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5949.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A5984.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album2/296A6070.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6138.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6148.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6173.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6240.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6298.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6557.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6577.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6601.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6671.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6752.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6816.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6859.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6964.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A6996.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A7035.JPG',
+          'https://nqduy99.github.io/SonTamWeddingInvitation/images/Album3/296A7075.JPG'
+        ]
+      };
 
-      (function initAlbum() {
+      var lbSrcs = [];
+      var lbIdx  = 0;
+
+      // Render 4 ô album với ảnh của thiệp hiện tại
+      function renderAlbum(type) {
+        var srcs = ALBUM_SRCS[type] || ['', '', '', ''];
+        lbSrcs = srcs.slice(); // copy để lightbox dùng
+        lbIdx  = 0;
+
         var cells = document.querySelectorAll('#album-grid .alb');
         cells.forEach(function(cell, i) {
-          var src = cell.getAttribute('data-src');
-          lbSrcs.push(src || '');
-          cell.addEventListener('click', function() {
-            var realSrcs = lbSrcs.filter(function(s){ return s; });
-            if (!src) return; // placeholder — bỏ qua
-            lbIdx = i;
-            lbShow(src, i);
-          });
+          var src = srcs[i] || '';
+          // Xóa nội dung cũ
+          cell.innerHTML = '';
+
+          if (src) {
+            // Skeleton placeholder hiển thị trong lúc ảnh load
+            var skeleton = document.createElement('div');
+            skeleton.className = 'alb-skeleton';
+            cell.appendChild(skeleton);
+
+            var img = document.createElement('img');
+            img.alt = 'Ảnh cưới ' + (i + 1);
+            img.loading = 'lazy'; // browser native lazy load
+
+            // Khi ảnh load xong: ẩn skeleton, fade in ảnh
+            img.onload = function() {
+              img.classList.add('loaded');
+              if (skeleton.parentNode) skeleton.parentNode.removeChild(skeleton);
+            };
+            img.onerror = function() {
+              if (skeleton.parentNode) skeleton.parentNode.removeChild(skeleton);
+            };
+
+            // Dùng IntersectionObserver để chỉ set src khi cell vào viewport
+            if (window.IntersectionObserver) {
+              img.dataset.lazySrc = src;
+              var lazyObs = new IntersectionObserver(function(entries, obs) {
+                entries.forEach(function(entry) {
+                  if (entry.isIntersecting) {
+                    entry.target.src = entry.target.dataset.lazySrc;
+                    obs.unobserve(entry.target);
+                  }
+                });
+              }, { rootMargin: '200px' });
+              lazyObs.observe(img);
+            } else {
+              img.src = src; // fallback
+            }
+
+            cell.appendChild(img);
+
+            // Badge "+N" ở ô cuối nếu có nhiều ảnh hơn 4
+            var total = srcs.filter(function(s){ return s; }).length;
+            if (i === 3 && total > 4) {
+              var badge = document.createElement('div');
+              badge.className = 'alb-more-badge';
+              badge.textContent = '+' + (total - 4);
+              cell.appendChild(badge);
+            }
+          } else {
+            var ph = document.createElement('div');
+            ph.className = 'alb-placeholder';
+            ph.innerHTML = '<i class="ti ti-photo"></i><span>Ảnh ' + (i + 1) + '</span>';
+            cell.appendChild(ph);
+          }
+
+          var ov = document.createElement('div');
+          ov.className = 'alb-overlay';
+          ov.innerHTML = '<span class="alb-zoom-icon">🔍</span>';
+          cell.appendChild(ov);
+
+          // Click mở lightbox
+          cell.onclick = (function(idx, s) {
+            return function() {
+              if (!s) return;
+              lbIdx = idx;
+              lbShow(s, idx);
+            };
+          })(i, src);
         });
-      })();
+      }
 
       function lbShow(src, idx) {
-        var lb = document.getElementById('lightbox');
+        var lb  = document.getElementById('lightbox');
         var img = document.getElementById('lb-img');
         img.src = src;
-        var realCount = lbSrcs.filter(function(s){ return s; }).length;
-        document.getElementById('lb-counter').textContent = realCount > 0 ? (idx + 1) + ' / ' + lbSrcs.length : '';
+        img.classList.remove('fading');
+        lbIdx = idx;
+        var total = lbSrcs.filter(function(s){ return s; }).length;
+        document.getElementById('lb-counter').textContent = total > 1 ? (idx + 1) + ' / ' + total : '';
         lb.classList.add('show');
         document.body.style.overflow = 'hidden';
+        lbBuildStrip();
+        lbUpdateStrip();
+      }
+
+      // Build thumbnail strip — dùng lazy loading để không tải hết 1 lần
+      function lbBuildStrip() {
+        var strip = document.getElementById('lb-strip');
+        strip.innerHTML = '';
+        lbSrcs.forEach(function(src, i) {
+          if (!src) return;
+          var t = document.createElement('img');
+          t.className = 'lb-thumb' + (i === lbIdx ? ' active' : '');
+          t.alt = 'Ảnh ' + (i + 1);
+          t.loading = 'lazy';
+          t.dataset.idx = i;
+          // Chỉ load thumbnail trong vùng gần ± 5 từ ảnh hiện tại trước, còn lại lazy
+          if (Math.abs(i - lbIdx) <= 5) {
+            t.src = src;
+          } else {
+            t.dataset.lazySrc = src;
+            // Observer cho thumbnail strip
+            var tObs = new IntersectionObserver(function(entries, obs) {
+              entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                  var el = entry.target;
+                  if (el.dataset.lazySrc) { el.src = el.dataset.lazySrc; delete el.dataset.lazySrc; }
+                  obs.unobserve(el);
+                }
+              });
+            }, { root: strip, rootMargin: '100px' });
+            tObs.observe(t);
+          }
+          t.onclick = function(e) {
+            e.stopPropagation();
+            lbGoTo(i);
+          };
+          strip.appendChild(t);
+        });
+      }
+
+      // Cập nhật trạng thái active thumbnail và scroll vào giữa
+      function lbUpdateStrip() {
+        var strip = document.getElementById('lb-strip');
+        var thumbs = strip.querySelectorAll('.lb-thumb');
+        thumbs.forEach(function(t) {
+          var active = parseInt(t.dataset.idx) === lbIdx;
+          t.classList.toggle('active', active);
+          if (active) {
+            // Scroll thumbnail vào giữa strip
+            var thumbLeft = t.offsetLeft;
+            var thumbW    = t.offsetWidth;
+            var stripW    = strip.offsetWidth;
+            strip.scrollTo({ left: thumbLeft - stripW / 2 + thumbW / 2, behavior: 'smooth' });
+          }
+        });
+      }
+
+      function lbGoTo(idx) {
+        if (!lbSrcs[idx]) return;
+        var img = document.getElementById('lb-img');
+        img.classList.add('fading');
+        setTimeout(function() {
+          lbIdx = idx;
+          img.src = lbSrcs[lbIdx];
+          img.classList.remove('fading');
+          var total = lbSrcs.filter(function(s){ return s; }).length;
+          document.getElementById('lb-counter').textContent = total > 1 ? (lbIdx + 1) + ' / ' + total : '';
+          lbUpdateStrip();
+          // Prefetch ảnh kế tiếp và trước để chuyển nhanh hơn
+          [1, -1].forEach(function(d) {
+            var ni = (lbIdx + d + lbSrcs.length) % lbSrcs.length;
+            if (lbSrcs[ni]) { var pre = new Image(); pre.src = lbSrcs[ni]; }
+          });
+        }, 160);
       }
 
       window.lbClose = function() {
@@ -3630,36 +3940,46 @@
       };
 
       window.lbClickOutside = function(e) {
-        if (e.target === document.getElementById('lightbox')) lbClose();
+        if (e.target === document.getElementById('lightbox') ||
+            e.target === document.getElementById('lb-main')) lbClose();
       };
 
       window.lbNav = function(dir) {
-        var next = lbIdx + dir;
-        // skip empty slots
+        var total = lbSrcs.length;
+        var next  = (lbIdx + dir + total) % total;
         var tries = 0;
-        while (tries < lbSrcs.length && (next < 0 || next >= lbSrcs.length || !lbSrcs[next])) {
-          next = ((next % lbSrcs.length) + lbSrcs.length) % lbSrcs.length;
-          next += dir;
+        while (!lbSrcs[next] && tries < total) {
+          next = (next + dir + total) % total;
           tries++;
         }
         if (!lbSrcs[next]) return;
-        lbIdx = next;
-        var img = document.getElementById('lb-img');
-        img.style.opacity = '0';
-        img.style.transition = 'opacity 0.2s';
-        setTimeout(function() {
-          img.src = lbSrcs[lbIdx];
-          img.style.opacity = '1';
-        }, 180);
-        document.getElementById('lb-counter').textContent = (lbIdx + 1) + ' / ' + lbSrcs.length;
+        lbGoTo(next);
       };
+
+      // Swipe trái/phải trên mobile
+      (function() {
+        var lb = document.getElementById('lightbox');
+        var startX = 0, startY = 0;
+        lb.addEventListener('touchstart', function(e) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+        lb.addEventListener('touchend', function(e) {
+          var dx = e.changedTouches[0].clientX - startX;
+          var dy = e.changedTouches[0].clientY - startY;
+          if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) lbNav(dx < 0 ? 1 : -1);
+        }, { passive: true });
+      })();
 
       document.addEventListener('keydown', function(e) {
         if (!document.getElementById('lightbox').classList.contains('show')) return;
-        if (e.key === 'Escape') lbClose();
-        if (e.key === 'ArrowLeft') lbNav(-1);
+        if (e.key === 'Escape')     lbClose();
+        if (e.key === 'ArrowLeft')  lbNav(-1);
         if (e.key === 'ArrowRight') lbNav(1);
       });
+
+      // Render lần đầu với thiệp mặc định (trai)
+      renderAlbum('trai');
 
       // ── FADE-UP KHI CUỘN ─────────────────────────────────
       (function() {
