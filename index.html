@@ -1625,9 +1625,11 @@
     }
     .alb img { opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; }
     .alb img.loaded { opacity: 1; }
+
+    footer {
       text-align: center;
-      padding: 60px 20px 100px;
-      border-top: 1px solid rgba(201, 84, 122, 0.15);
+      padding: 36px 20px 44px;
+      border-top: 1.5px solid rgba(201, 84, 122, 0.3);
       position: relative;
       z-index: 1;
     }
@@ -1636,6 +1638,7 @@
       font-family: 'Dancing Script', cursive;
       font-size: 42px;
       color: var(--c-dark);
+      text-align: center;
     }
 
     #petals-container {
@@ -1717,7 +1720,9 @@
     /* ── LIGHTBOX ──────────────────────────────── */
     #lightbox {
       display: none; position: fixed; inset: 0; z-index: 9500;
-      background: rgba(6, 3, 10, 0.96);
+      background: rgba(6, 3, 10, 0.55);
+      backdrop-filter: blur(18px) saturate(0.7);
+      -webkit-backdrop-filter: blur(18px) saturate(0.7);
       flex-direction: column;
       align-items: center; justify-content: center;
       gap: 0;
