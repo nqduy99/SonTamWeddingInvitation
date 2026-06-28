@@ -2138,7 +2138,7 @@
     .couple-photo-wrap {
       max-width: 700px;
       width: 100%;
-      margin: 28px auto 0;
+      margin: 24px auto 28px;
       border-radius: 16px;
       overflow: hidden;
       border: 1.5px solid rgba(201,84,122,0.18);
@@ -2671,29 +2671,15 @@
       <div class="floral-divider">🌸 🌺 🌸</div>
       <h1 class="couple-names fade-up" id="hero-names">Thái Sơn <span style="color:var(--c-light);font-size:44px;">&amp;</span> Thanh Tâm</h1>
       <p class="hero-roles fade-up" id="hero-roles" style="transition-delay:0.08s;"></p>
-      <p class="wedding-date-hero fade-up" id="hero-date" style="transition-delay:0.18s;">02 tháng 08 năm 2026</p>
-    </section>
-
-
-    <!-- COUPLE PHOTO -->
-    <section style="padding:0;position:relative;z-index:1;">
-      <div style="max-width:560px;margin:0 auto;position:relative;"> </div>
-    </section>
-
-    <!-- PROFILES / COUPLE PHOTO -->
-    <section id="profiles" class="section-alt" style="text-align:center;">
-      <span class="section-sub" id="profiles-sub">Cô dâu &amp; Chú rể</span>
-      <h2 class="section-title">Cặp đôi của chúng mình</h2>
-      <div class="couple-photo-wrap">
+      <div class="couple-photo-wrap fade-up" style="transition-delay:0.14s;">
         <label class="couple-photo-placeholder" title="Nhấn để thay ảnh (khi dùng trên web server)">
           <i class="ti ti-camera" style="font-size:36px;color:rgba(201,84,122,0.35);"></i>
           <span>Ảnh đôi — nằm ngang</span>
-          <span style="font-size:12px;opacity:0.55;">Thay src trong thẻ &lt;img id="couple-photo"&gt;</span>
         </label>
-        <!-- Thay src="" bằng đường dẫn ảnh thực tế -->
         <img id="couple-photo" src="" alt="Ảnh đôi Thái Sơn &amp; Thanh Tâm"
              style="display:none;width:100%;height:100%;object-fit:cover;border-radius:16px;" />
       </div>
+      <p class="wedding-date-hero fade-up" id="hero-date" style="transition-delay:0.22s;">02 tháng 08 năm 2026</p>
     </section>
 
     <!-- STORY -->
@@ -2830,6 +2816,7 @@
         Hãy cho chúng mình biết để chuẩn bị đón tiếp bạn thật chu đáo nhé!
       </p>
       <div class="rsvp-wrap">
+        <div id="rsvp-form-wrap">
         <input type="text" id="rsvp-name" placeholder="Họ tên của bạn..." maxlength="60" />
         <div class="rsvp-choices">
           <div class="rsvp-choice" id="choice-yes" onclick="selectRsvp('yes')">
@@ -2850,15 +2837,15 @@
           <div class="rsvp-choices">
             <div class="rsvp-choice rsvp-venue-btn" id="venue-gai" onclick="selectVenue('gai')">
               <span class="choice-icon">🌸</span>
-              Nhà Gái<br><span style="font-size:13px;font-style:italic;opacity:0.75;">02/08 · Mang Yang, Gia Lai</span>
+              Nhà Gái
             </div>
             <div class="rsvp-choice rsvp-venue-btn" id="venue-trai" onclick="selectVenue('trai')">
               <span class="choice-icon">🥂</span>
-              Nhà Trai<br><span style="font-size:13px;font-style:italic;opacity:0.75;">08/08 · Cư Jút, Lâm Đồng</span>
+              Nhà Trai
             </div>
             <div class="rsvp-choice rsvp-venue-btn" id="venue-both" onclick="selectVenue('both')">
               <span class="choice-icon">💕</span>
-              Cả hai
+              Cả hai nhà
             </div>
           </div>
         </div>
@@ -2873,12 +2860,12 @@
             <option value="5">Tôi + 4 người (5 người)</option>
           </select>
         </div>
-
-        <!-- Gợi ý địa điểm sau khi chọn -->
-        <div id="rsvp-suggest" style="display:none;"></div>
-
-        <div id="rsvp-result"></div>
         <button class="btn-send" id="btn-rsvp" onclick="submitRsvp()" style="display:none;">Xác nhận</button>
+        </div><!-- /#rsvp-form-wrap -->
+
+        <!-- Hiện sau khi submit -->
+        <div id="rsvp-result"></div>
+        <div id="rsvp-suggest" style="display:none;"></div>
       </div>
     </section>
 
@@ -2909,8 +2896,9 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Họ tên</th>
+                <th>Họ và tên</th>
                 <th>Tham dự</th>
+                <th>Địa điểm</th>
                 <th>Số người</th>
                 <th>Thời gian</th>
               </tr>
@@ -3095,7 +3083,7 @@
         🎵
       </button>
     </div>
-    <audio id="bg-music" loop preload="auto">
+    <audio id="bg-music" preload="auto">
       <source src="https://nqduy99.github.io/SonTamWeddingInvitation/music/PhepMau.mp3" type="audio/mpeg">
     </audio>
 
@@ -3123,6 +3111,19 @@
       let fadingTimer = null;
       const bgMusic = document.getElementById('bg-music');
 
+      // ⏱ Giây bắt đầu câu "Chẳng phải phép màu, tại sao chúng ta gặp nhau"
+      // Chỉnh số này nếu bản MP3 của bạn khác (dùng DevTools > Sources để xem)
+      const CHORUS_START = 70.5;
+
+      // Khi bài phát hết → quay lại điệp khúc
+      bgMusic.addEventListener('ended', function () {
+        if (musicPlaying) {
+          bgMusic.currentTime = CHORUS_START;
+          bgMusic.volume = 1;
+          bgMusic.play().catch(function(){});
+        }
+      });
+
       // Fade volume in/out — hủy fade cũ trước khi bắt đầu fade mới
       function fadeVolume(targetVol, duration, callback) {
         if (fadingTimer) { clearInterval(fadingTimer); fadingTimer = null; }
@@ -3146,22 +3147,23 @@
       window.toggleMusic = function () {
         const btn = document.getElementById('music-btn');
         if (!musicPlaying) {
-          // Dừng fade-out nếu đang chạy, bắt đầu phát lại
           if (fadingTimer) { clearInterval(fadingTimer); fadingTimer = null; }
           bgMusic.volume = 0;
+          // Lần đầu play: bắt đầu từ điệp khúc
+          if (bgMusic.currentTime === 0) {
+            bgMusic.currentTime = CHORUS_START;
+          }
           var playPromise = bgMusic.play();
           if (playPromise !== undefined) {
             playPromise.then(function () {
               fadeVolume(1, 1200);
-            }).catch(function () {
-              // Mobile blocked — vẫn cập nhật UI, user thử lại được
-            });
+            }).catch(function () {});
           }
           btn.textContent = '🎶';
           btn.classList.add('playing');
           musicPlaying = true;
         } else {
-          // Fade out rồi pause — KHÔNG reset currentTime để tiếp tục được từ chỗ dừng
+          // Fade out rồi pause — KHÔNG reset currentTime để tiếp tục từ chỗ dừng
           musicPlaying = false;
           btn.textContent = '🎵';
           btn.classList.remove('playing');
@@ -3296,10 +3298,6 @@
         const r1 = d.profileFirst.role2, r2 = d.profileSecond.role2;
         document.getElementById('hero-roles').textContent = r1 + '  ✦  ' + r2;
 
-        // Profiles label
-        document.getElementById('profiles-sub').innerHTML =
-          type === 'gai' ? 'Cô dâu &amp; Chú rể' : 'Chú rể &amp; Cô dâu';
-
         // Album ảnh theo thiệp
         renderAlbum(type);
 
@@ -3429,6 +3427,7 @@
         window.scrollTo({ top: 0, behavior: 'instant' });
         setTimeout(function () {
           const btn = document.getElementById('music-btn');
+          bgMusic.currentTime = CHORUS_START;
           bgMusic.volume = 0;
           bgMusic.play().then(function () {
             fadeVolume(1, 1500);
@@ -3477,13 +3476,21 @@
       let rsvpVenue = null;
       let allRsvps = [];
 
-      // Gợi ý địa điểm — sẽ cập nhật sau
+      // Gợi ý địa điểm
       const SUGGEST = {
         gai: [
-          { icon: '🍽️', name: 'Sẽ cập nhật sớm', desc: 'Địa điểm ăn uống tại Gia Lai' },
+          { icon: '🍜', name: 'Phở Gia Lai', desc: 'Phở bò đặc sản Gia Lai, nước dùng đậm đà' },
+          { icon: '🥩', name: 'Cơm lam gà nướng', desc: 'Đặc sản núi rừng Tây Nguyên' },
+          { icon: '☕', name: 'Cà phê Gia Lai', desc: 'Cà phê Arabica Phố Núi thơm ngon' },
+          { icon: '🍢', name: 'Bò một nắng Mang Yang', desc: 'Đặc sản nổi tiếng của vùng Mang Yang' },
+          { icon: '🍺', name: 'Quán nhậu Phố Núi', desc: 'Ẩm thực đường phố Pleiku buổi tối' },
         ],
         trai: [
-          { icon: '🍽️', name: 'Sẽ cập nhật sớm', desc: 'Địa điểm ăn uống tại Cư Jút, Lâm Đồng' },
+          { icon: '🐟', name: 'Cá lăng nướng Cư Jút', desc: 'Đặc sản cá sông Sêrêpốk tươi ngon' },
+          { icon: '🥩', name: 'Thịt nướng Đắk Nông', desc: 'Thịt heo rừng, bò nướng than hoa' },
+          { icon: '☕', name: 'Cà phê Đắk Nông', desc: 'Cà phê Robusta nguyên chất hương vị đặc trưng' },
+          { icon: '🍲', name: 'Canh chua cá lóc', desc: 'Món ăn dân dã đặc trưng miền Đông Nam Bộ' },
+          { icon: '🫙', name: 'Rượu cần Tây Nguyên', desc: 'Trải nghiệm văn hóa rượu cần bản địa' },
         ]
       };
 
@@ -3543,7 +3550,8 @@
         if (sel) sel.className = 'rsvp-choice rsvp-venue-btn selected-venue';
         document.getElementById('rsvp-guests-wrap').style.display = 'block';
         document.getElementById('btn-rsvp').style.display = 'inline-block';
-        renderSuggest(venue);
+        // Ẩn suggest — chỉ hiện SAU KHI submit
+        document.getElementById('rsvp-suggest').style.display = 'none';
       };
 
       window.submitRsvp = async function () {
@@ -3554,7 +3562,9 @@
         if (!rsvpChoice) { alert('Vui lòng chọn tham dự hay không!'); return; }
         if (rsvpChoice === 'yes' && !rsvpVenue) { alert('Vui lòng chọn tiệc nhà gái, nhà trai hoặc cả hai!'); return; }
         btn.disabled = true; btn.textContent = 'Đang gửi...';
-        const venueLabel = rsvpVenue === 'gai' ? 'Nhà Gái' : rsvpVenue === 'trai' ? 'Nhà Trai' : 'Cả hai';
+        const savedChoice = rsvpChoice;
+        const savedVenue  = rsvpVenue;
+        const venueLabel  = savedVenue === 'gai' ? 'Nhà Gái' : savedVenue === 'trai' ? 'Nhà Trai' : 'Cả hai nhà';
         try {
           await addDoc(collection(db, 'rsvp'), {
             name, attending: rsvpChoice === 'yes', guests,
@@ -3564,17 +3574,19 @@
           const d = THIEP[currentThiep];
           const dateStr = currentThiep === 'gai' ? '02/08/2026' : '08/08/2026';
           document.getElementById('rsvp-result').innerHTML =
-            rsvpChoice === 'yes'
-              ? `<div class="rsvp-success">🥂 Cảm ơn <strong>${name}</strong>! Hẹn gặp bạn tại ${venueLabel} ngày ${dateStr}! 🎉</div>`
+            savedChoice === 'yes'
+              ? `<div class="rsvp-success">🥂 Cảm ơn <strong>${name}</strong>! Hẹn gặp bạn tại ${venueLabel}! 🎉</div>`
               : `<div class="rsvp-success">💌 Cảm ơn <strong>${name}</strong> đã phản hồi. Rất tiếc khi không được gặp bạn!</div>`;
-          document.getElementById('rsvp-name').value = '';
-          document.getElementById('choice-yes').className = 'rsvp-choice';
-          document.getElementById('choice-no').className = 'rsvp-choice';
-          document.getElementById('rsvp-venue-wrap').style.display = 'none';
-          document.getElementById('rsvp-guests-wrap').style.display = 'none';
-          document.getElementById('rsvp-suggest').style.display = 'none';
+          // Ẩn toàn bộ form (tên + các lựa chọn)
+          document.getElementById('rsvp-form-wrap').style.display = 'none';
           btn.style.display = 'none';
           rsvpChoice = null; rsvpVenue = null;
+          // Chỉ hiện suggest khi có tham dự
+          if (savedChoice === 'yes' && savedVenue) {
+            renderSuggest(savedVenue);
+          } else {
+            document.getElementById('rsvp-suggest').style.display = 'none';
+          }
         } catch (e) {
           alert('Gửi thất bại, vui lòng thử lại!');
           btn.disabled = false; btn.textContent = 'Xác nhận';
@@ -3640,10 +3652,12 @@
           document.getElementById('stat-no').textContent = no.length;
           document.getElementById('rsvp-tbody').innerHTML = allRsvps.map((r, i) => {
             const date = r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleString('vi-VN') : '—';
+            const venueLabel = r.venue === 'gai' ? '🌸 Nhà Gái' : r.venue === 'trai' ? '🥂 Nhà Trai' : r.venue === 'both' ? '💕 Cả hai nhà' : '—';
             return `<tr>
           <td>${i + 1}</td>
           <td><strong>${r.name}</strong></td>
           <td>${r.attending ? '<span class="badge-yes">✓ Có</span>' : '<span class="badge-no">✗ Không</span>'}</td>
+          <td>${r.attending ? venueLabel : '—'}</td>
           <td>${r.attending ? (r.guests || 1) + ' người' : '—'}</td>
           <td style="font-size:12px;color:#999;">${date}</td>
         </tr>`;
@@ -3654,14 +3668,18 @@
       // ── EXPORT EXCEL (CSV) ───────────────────────────────
       window.exportExcel = function () {
         if (!allRsvps.length) { alert('Chưa có dữ liệu!'); return; }
-        const header = ['STT', 'Họ tên', 'Tham dự', 'Số người', 'Thời gian'];
-        const rows = allRsvps.map((r, i) => [
-          i + 1,
-          r.name,
-          r.attending ? 'Có' : 'Không',
-          r.attending ? (r.guests || 1) : 0,
-          r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleString('vi-VN') : ''
-        ]);
+        const header = ['STT', 'Họ và tên', 'Tham dự', 'Địa điểm', 'Số người', 'Thời gian'];
+        const rows = allRsvps.map((r, i) => {
+          const venueLabel = r.venue === 'gai' ? 'Nhà Gái' : r.venue === 'trai' ? 'Nhà Trai' : r.venue === 'both' ? 'Cả hai nhà' : '';
+          return [
+            i + 1,
+            r.name,
+            r.attending ? 'Có' : 'Không',
+            r.attending ? venueLabel : '',
+            r.attending ? (r.guests || 1) : 0,
+            r.createdAt ? new Date(r.createdAt.seconds * 1000).toLocaleString('vi-VN') : ''
+          ];
+        });
         const csv = [header, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
         const bom = '\uFEFF';
         const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
